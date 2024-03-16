@@ -34,11 +34,8 @@ from pyrogram.errors import (
 )
 from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls
-from pytgcalls.exceptions import (
-    AlreadyJoinedError,
-    NoActiveGroupCall,
-    TelegramServerError,
-)
+from ntgcalls import TelegramServerError
+from pytgcalls.exceptions import AlreadyJoinedError, NoActiveGroupCall
 from pytgcalls.types import (
     JoinedGroupCallParticipant,
     LeftGroupCallParticipant,
@@ -206,13 +203,13 @@ class Call(PyTgCalls):
                 file_path,
                 audio_parameters=audio_stream_quality,
                 video_parameters=video_stream_quality,
-                additional_ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
+                ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
             if mode == "video"
             else MediaStream(
                 file_path,
                 audio_parameters=audio_stream_quality,
-                additional_ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
+                ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
         )
         await assistant.change_stream(chat_id, stream)
@@ -226,7 +223,10 @@ class Call(PyTgCalls):
                 get = await app.get_chat_member(chat_id, userbot.id)
             except ChatAdminRequired:
                 raise AssistantErr(_["call_1"])
-            if get.status == "banned" or get.status == "kicked":
+            if (
+                get.status == ChatMemberStatus.BANNED
+                or get.status == ChatMemberStatus.RESTRICTED
+            ):
                 try:
                     await app.unban_chat_member(chat_id, userbot.id)
                 except:
