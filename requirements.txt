@@ -1,6 +1,6 @@
 aiofiles
 aiohttp
-dnspython==2.2.1
+dnspython
 ffmpeg-python
 gitpython
 hachoir
@@ -13,14 +13,14 @@ psutil
 py-tgcalls==1.2.2
 pykeyboard
 pymongo==4.6.2
-git+https://github.com/KurimuzonAkuma/pyrogram@feff7cd29dd08c968710f770eb8850ea97d609fa
+git+https://github.com/PyrogramMod/PyrogramMod@main
 python-dotenv
 PyYAML
 requests
 speedtest-cli
 spotipy
 tgcrypto
-yt-dlp==2023.10.13
+yt-dlp
 git+https://github.com/alexmercerind/youtube-search-python@main
 git+https://github.com/joetats/youtube_search@master
 numpy
