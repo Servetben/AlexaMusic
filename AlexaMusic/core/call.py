@@ -27,21 +27,21 @@ from datetime import datetime, timedelta
 from typing import Union
 
 from pyrogram import Client
+from pyrogram.enums import ChatMemberStatus
 from pyrogram.errors import (
     ChatAdminRequired,
     UserAlreadyParticipant,
     UserNotParticipant,
 )
 from pyrogram.types import InlineKeyboardMarkup
-from pytgcalls import PyTgCalls
-from ntgcalls import TelegramServerError
-from pytgcalls.exceptions import AlreadyJoinedError, NoActiveGroupCall
-from pytgcalls.types import (
-    JoinedGroupCallParticipant,
-    LeftGroupCallParticipant,
-    MediaStream,
-    Update,
+from pytgcalls import PyTgCalls, StreamType
+from pytgcalls.exceptions import (
+    AlreadyJoinedError,
+    NoActiveGroupCall,
+    TelegramServerError,
 )
+from pytgcalls.types import JoinedGroupCallParticipant, LeftGroupCallParticipant, Update
+from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
 from pytgcalls.types.stream import StreamAudioEnded
 
 import config
@@ -174,25 +174,21 @@ class Call(PyTgCalls):
         audio_stream_quality = await get_audio_bitrate(chat_id)
         video_stream_quality = await get_video_bitrate(chat_id)
         if video:
-            stream = MediaStream(
+            stream = AudioVideoPiped(
                 link,
                 audio_parameters=audio_stream_quality,
                 video_parameters=video_stream_quality,
             )
         else:
             if image and config.PRIVATE_BOT_MODE == str(True):
-                stream = MediaStream(
+                stream = AudioVideoPiped(
                     link,
                     image,
                     audio_parameters=audio_stream_quality,
                     video_parameters=video_stream_quality,
                 )
             else:
-                stream = MediaStream(
-                    link,
-                    audio_parameters=audio_stream_quality,
-                    video_flags=MediaStream.IGNORE,
-                )
+                stream = AudioPiped(link, audio_parameters=HighQualityAudio())
         await assistant.change_stream(
             chat_id,
             stream,
@@ -203,18 +199,17 @@ class Call(PyTgCalls):
         audio_stream_quality = await get_audio_bitrate(chat_id)
         video_stream_quality = await get_video_bitrate(chat_id)
         stream = (
-            MediaStream(
+            AudioVideoPiped(
                 file_path,
                 audio_parameters=audio_stream_quality,
                 video_parameters=video_stream_quality,
-                ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
+                additional_ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
             if mode == "video"
-            else MediaStream(
+            else AudioPiped(
                 file_path,
                 audio_parameters=audio_stream_quality,
-                ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
-                video_flags=MediaStream.IGNORE,
+                additional_ffmpeg_parameters=f"-ss {to_seek} -to {duration}",
             )
         )
         await assistant.change_stream(chat_id, stream)
@@ -292,14 +287,14 @@ class Call(PyTgCalls):
         audio_stream_quality = await get_audio_bitrate(chat_id)
         video_stream_quality = await get_video_bitrate(chat_id)
         if video:
-            stream = MediaStream(
+            stream = AudioVideoPiped(
                 link,
                 audio_parameters=audio_stream_quality,
                 video_parameters=video_stream_quality,
             )
         else:
             if image and config.PRIVATE_BOT_MODE == str(True):
-                stream = MediaStream(
+                stream = AudioVideoPiped(
                     link,
                     image,
                     audio_parameters=audio_stream_quality,
@@ -307,16 +302,15 @@ class Call(PyTgCalls):
                 )
             else:
                 stream = (
-                    MediaStream(
+                    AudioVideoPiped(
                         link,
                         audio_parameters=audio_stream_quality,
                         video_parameters=video_stream_quality,
                     )
                     if video
-                    else MediaStream(
+                    else AudioPiped(
                         link,
                         audio_parameters=audio_stream_quality,
-                        video_flags=MediaStream.IGNORE,
                     )
                 )
         try:
@@ -400,7 +394,7 @@ class Call(PyTgCalls):
                         text=_["call_9"],
                     )
                 if video:
-                    stream = MediaStream(
+                    stream = AudioVideoPiped(
                         link,
                         audio_parameters=audio_stream_quality,
                         video_parameters=video_stream_quality,
@@ -411,17 +405,16 @@ class Call(PyTgCalls):
                     except:
                         image = None
                     if image and config.PRIVATE_BOT_MODE == str(True):
-                        stream = MediaStream(
+                        stream = AudioVideoPiped(
                             link,
                             image,
                             audio_parameters=audio_stream_quality,
                             video_parameters=video_stream_quality,
                         )
                     else:
-                        stream = MediaStream(
+                        stream = AudioPiped(
                             link,
                             audio_parameters=audio_stream_quality,
-                            video_flags=MediaStream.IGNORE,
                         )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -460,7 +453,7 @@ class Call(PyTgCalls):
                         _["call_9"], disable_web_page_preview=True
                     )
                 if video:
-                    stream = MediaStream(
+                    stream = AudioVideoPiped(
                         file_path,
                         audio_parameters=audio_stream_quality,
                         video_parameters=video_stream_quality,
@@ -471,17 +464,16 @@ class Call(PyTgCalls):
                     except:
                         image = None
                     if image and config.PRIVATE_BOT_MODE == str(True):
-                        stream = MediaStream(
+                        stream = AudioVideoPiped(
                             file_path,
                             image,
                             audio_parameters=audio_stream_quality,
                             video_parameters=video_stream_quality,
                         )
                     else:
-                        stream = MediaStream(
+                        stream = AudioPiped(
                             file_path,
                             audio_parameters=audio_stream_quality,
-                            video_flags=MediaStream.IGNORE,
                         )
                 try:
                     await client.change_stream(chat_id, stream)
@@ -509,16 +501,15 @@ class Call(PyTgCalls):
                 db[chat_id][0]["markup"] = "stream"
             elif "index_" in queued:
                 stream = (
-                    MediaStream(
+                    AudioVideoPiped(
                         videoid,
                         audio_parameters=audio_stream_quality,
                         video_parameters=video_stream_quality,
                     )
                     if str(streamtype) == "video"
-                    else MediaStream(
+                    else AudioPiped(
                         videoid,
                         audio_parameters=audio_stream_quality,
-                        video_flags=MediaStream.IGNORE,
                     )
                 )
                 try:
@@ -548,24 +539,23 @@ class Call(PyTgCalls):
                     except:
                         image = None
                 if video:
-                    stream = MediaStream(
+                    stream = AudioVideoPiped(
                         queued,
                         audio_parameters=audio_stream_quality,
                         video_parameters=video_stream_quality,
                     )
                 else:
                     if image and config.PRIVATE_BOT_MODE == str(True):
-                        stream = MediaStream(
+                        stream = AudioVideoPiped(
                             queued,
                             image,
                             audio_parameters=audio_stream_quality,
                             video_parameters=video_stream_quality,
                         )
                     else:
-                        stream = MediaStream(
+                        stream = AudioPiped(
                             queued,
                             audio_parameters=audio_stream_quality,
-                            video_flags=MediaStream.IGNORE,
                         )
                 try:
                     await client.change_stream(chat_id, stream)
