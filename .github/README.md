@@ -1,4 +1,4 @@
-<h1 align="center"><b>❤️ ALEXA MUSIC 3.0 ❤️</b></h1>
+<h1 align="center"><b>❤️ 𝘼𝙡𝙚𝙭𝙖 𝙈𝙪𝙨𝙞𝙘 ❤️</b></h1>
 
 <h4 align="center">"Introducing Alexa Music – your smart, powerful, and simple bot for seamless audio and video playback on Telegram. Written in Python with the latest Pyrogram, Alexa Music delivers a superior entertainment experience. Upgrade now for optimal performance and a new level of Telegram enjoyment."<br> ... Working With Pyrogram Latest Version...</h4>
 
@@ -13,17 +13,20 @@
 </p>
 
 
-<h1 align="center"><b>Fix for YouTube Blocking IPs and Sign in Error</b></h1>
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/57800056/245666143-0d8d5230-d40d-4692-9dee-1a05cbf58828.png"/>
+</p>
+<h2 align="center"><b>Fix for YouTube Blocking IPs and Sign in Error</b></h2>
 
-Due to YouTube blocking Ips, we found a fix. Given below:
+Due to YouTube blocking ips, we found a fix. Given below:
 
 • **Join Support Group**: Type `cookies` in our [sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ](https://t.me/Alexa_Help) to get the necessary script.
 
-• **Run the Script**: Run the downloaded script on your Windows Desktop Through VS Code or any other Software to generate cookies.
+• **Run the Extension**: Download Firefox and login your youtube account(Fake Account Recommended) then run the downloaded extension on your Firefox or any other Software to generate cookies.
 
-• **Add Cookies**: Paste the generated cookies into the `AlexaMusic/platforms/cookies/cookies.txt` folder in your forked repository.
+• **Add Cookies**: Paste the generated cookies into the `AlexaMusic\platforms\cookies.txt` folder in your forked repository.
 
-• **Deploy the Bot**
+• **Deploy the Bot ✨** 
 
 
 <h1 align="center"><b>😂 ᴠɪᴇᴡ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs 😂</b></h1>
@@ -100,12 +103,64 @@ Through this repository, we hope to share our passion for music and innovation w
 <summary><b>ʀᴇǫᴜɪʀᴇᴍᴇɴᴛs</b></summary>
 <br>
     
-- [ᴘʏᴛʜᴏɴ 𝟹.11](https://www.python.org/downloads/release/python-3110/)
+- [ᴘʏᴛʜᴏɴ 𝟹](https://www.python.org/)
 - [ᴛᴇʟᴇɢʀᴀᴍ ᴀᴘɪ ᴋᴇʏ](https://docs.pyrogram.org/intro/setup#api-keys)
 - [ᴛᴇʟᴇɢʀᴀᴍ ʙᴏᴛ ᴛᴏᴋᴇɴ](https://t.me/botfather)
 - [ᴍᴏɴɢᴏᴅʙ URI](https://telegra.ph/How-To-get-Mongodb-URI-04-06)
 - [sᴛʀɪɴɢ sᴇssɪᴏɴ](https://t.me/StringGeneratorRobot)
-    
+
+<summary><b>Lᴏᴄᴀʟ Hᴏsᴛɪɴɢ ᴏʀ VPS</b></summary>
+<br>
+
+1.  Upgrade and Update:
+```console
+sudo apt-get update && sudo apt-get upgrade -y
+```
+
+2. Installing Required Packages:
+```console
+sudo apt-get install python3-pip ffmpeg -y
+```
+
+3. Setting up PIP
+```console
+sudo pip3 install -U pip
+```
+
+4. Clone the Repository
+```console
+git clone https://github.com/TheTeamAlexa/AlexaMusic && cd AlexaMusic
+```
+
+5. Install Requirements
+```console
+pip3 install -U -r requirements.txt
+```
+
+6. Create .env  with sample.env
+```console
+cp sample.env .env
+```
+Edit .env with your vars 
+
+7. Editing Vars:
+```console
+vi .env
+```
+> Edit .env with your values or you can simple copy a config from here and paste it to your notepad, then edit and paste there.
+> Press I button on keyboard to start editing.
+> Press Ctrl + C  once you are done with editing vars and type :wq to save .env or :qa to exit editing.
+
+8. Install Tmux : 
+```console
+sudo apt install tmux && tmux
+```
+
+9. Finally Run Alexa Music Bot
+```console
+bash start
+```
+
 <summary><b>sᴄᴀʟɪɴɢᴏ</b></summary>
 <br>
 ɴᴏᴡ ʏᴏᴜ ᴄᴀɴ ᴅᴇᴘʟᴏʏ ᴀʟᴇxᴀ ᴍᴜsɪᴄ ᴏɴ sᴄᴀʟɪɴɢᴏ ɪɴᴛʀᴏᴅᴜᴄᴇᴅ ʙʏ @ITZ-ZAID
@@ -158,7 +213,7 @@ Through this repository, we hope to share our passion for music and innovation w
 <br>
 
 - [ᴀʙʜɪᴍᴀɴᴜ](https://t.me/btwAbhimanyu)
-- [ᴋsᴋ](https://t.me/EVERYONExKSKOP)
+- [ᴋsᴋ](https://t.me/EVERYONExKSK)
 
 </details>
 
@@ -184,7 +239,9 @@ Through this repository, we hope to share our passion for music and innovation w
 ᴛʜᴀɴᴋs ᴛᴏ ᴀʟʟ ᴏғ ʏᴏᴜ ғᴏʀ ᴜsɪɴɢ ᴀɴᴅ ᴍᴀᴋɪɴɢ ᴀʟᴇxᴀ:
 
 - [Pyrogram](https://github.com/pyrogram)
-- [Py-Tgcalls](https://github.com/pytgcalls/pytgcalls)
+- [Py-Tgcalls](https://pypi.org/project/py-tgcalls)
+- [Ntgcalls](https://pypi.org/project/ntgcalls/)
+- [Yt-dlp](https://pypi.org/project/yt-dlp)
 </details>
 
 

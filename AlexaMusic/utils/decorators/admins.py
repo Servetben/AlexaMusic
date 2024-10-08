@@ -12,7 +12,7 @@ as you want or you can collabe if you have new ideas.
 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.enums import ChatType
-from config import adminlist
+from config import SUPPORT_GROUP, adminlist
 from strings import get_string
 from AlexaMusic import app
 from AlexaMusic.misc import SUDOERS
@@ -21,7 +21,6 @@ from AlexaMusic.utils.database import (
     get_cmode,
     get_lang,
     is_active_chat,
-    is_commanddelete_on,
     is_maintenance,
     is_nonadmin_chat,
 )
@@ -31,16 +30,18 @@ from ..formatters import int_to_alpha
 
 def AdminRightsCheck(mystic):
     async def wrapper(client, message):
-        if await is_maintenance() is False:
+        if await is_maintenance():
             if message.from_user.id not in SUDOERS:
                 return await message.reply_text(
-                    "» ʙᴏᴛ ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ ғᴏʀ sᴏᴍᴇ ᴛɪᴍᴇ, ᴩʟᴇᴀsᴇ ᴠɪsɪᴛ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ ᴛᴏ ᴋɴᴏᴡ ᴛʜᴇ ʀᴇᴀsᴏɴ."
+                    text=f"{app.mention} ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ, ᴠɪsɪᴛ <a href={SUPPORT_GROUP}>sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ</a> ғᴏʀ ᴋɴᴏᴡɪɴɢ ᴛʜᴇ ʀᴇᴀsᴏɴ.",
+                    disable_web_page_preview=True,
                 )
-        if await is_commanddelete_on(message.chat.id):
-            try:
-                await message.delete()
-            except:
-                pass
+
+        try:
+            await message.delete()
+        except:
+            pass
+
         try:
             language = await get_lang(message.chat.id)
             _ = get_string(language)
@@ -86,16 +87,18 @@ def AdminRightsCheck(mystic):
 
 def AdminActual(mystic):
     async def wrapper(client, message):
-        if await is_maintenance() is False:
+        if await is_maintenance():
             if message.from_user.id not in SUDOERS:
                 return await message.reply_text(
-                    "» ʙᴏᴛ ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ ғᴏʀ sᴏᴍᴇ ᴛɪᴍᴇ, ᴩʟᴇᴀsᴇ ᴠɪsɪᴛ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ ᴛᴏ ᴋɴᴏᴡ ᴛʜᴇ ʀᴇᴀsᴏɴ."
+                    text=f"{app.mention} ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ, ᴠɪsɪᴛ <a href={SUPPORT_GROUP}>sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ</a> ғᴏʀ ᴋɴᴏᴡɪɴɢ ᴛʜᴇ ʀᴇᴀsᴏɴ.",
+                    disable_web_page_preview=True,
                 )
-        if await is_commanddelete_on(message.chat.id):
-            try:
-                await message.delete()
-            except:
-                pass
+
+        try:
+            await message.delete()
+        except:
+            pass
+
         try:
             language = await get_lang(message.chat.id)
             _ = get_string(language)
@@ -115,12 +118,12 @@ def AdminActual(mystic):
             return await message.reply_text(_["general_4"], reply_markup=upl)
         if message.from_user.id not in SUDOERS:
             try:
-                member = await app.get_chat_member(
-                    message.chat.id, message.from_user.id
-                )
+                member = (
+                    await app.get_chat_member(message.chat.id, message.from_user.id)
+                ).privileges
             except:
                 return
-            if not member.privileges.can_manage_video_chats:
+            if not member.can_manage_video_chats:
                 return await message.reply(_["general_5"])
         return await mystic(client, message, _)
 
@@ -129,10 +132,10 @@ def AdminActual(mystic):
 
 def ActualAdminCB(mystic):
     async def wrapper(client, CallbackQuery):
-        if await is_maintenance() is False:
+        if await is_maintenance():
             if CallbackQuery.from_user.id not in SUDOERS:
                 return await CallbackQuery.answer(
-                    "» ʙᴏᴛ ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ ғᴏʀ sᴏᴍᴇ ᴛɪᴍᴇ, ᴩʟᴇᴀsᴇ ᴠɪsɪᴛ sᴜᴩᴩᴏʀᴛ ᴄʜᴀᴛ ᴛᴏ ᴋɴᴏᴡ ᴛʜᴇ ʀᴇᴀsᴏɴ.",
+                    f"{app.mention} ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ, ᴠɪsɪᴛ sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ ғᴏʀ ᴋɴᴏᴡɪɴɢ ᴛʜᴇ ʀᴇᴀsᴏɴ.",
                     show_alert=True,
                 )
         try:
@@ -145,13 +148,15 @@ def ActualAdminCB(mystic):
         is_non_admin = await is_nonadmin_chat(CallbackQuery.message.chat.id)
         if not is_non_admin:
             try:
-                a = await app.get_chat_member(
-                    CallbackQuery.message.chat.id,
-                    CallbackQuery.from_user.id,
-                )
+                a = (
+                    await app.get_chat_member(
+                        CallbackQuery.message.chat.id,
+                        CallbackQuery.from_user.id,
+                    )
+                ).privileges
             except:
                 return await CallbackQuery.answer(_["general_5"], show_alert=True)
-            if not a.privileges.can_manage_video_chats:
+            if not a.can_manage_video_chats:
                 if CallbackQuery.from_user.id not in SUDOERS:
                     token = await int_to_alpha(CallbackQuery.from_user.id)
                     _check = await get_authuser_names(CallbackQuery.from_user.id)

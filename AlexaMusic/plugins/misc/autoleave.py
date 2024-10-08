@@ -11,11 +11,19 @@ as you want or you can collabe if you have new ideas.
 
 import asyncio
 from pyrogram.enums import ChatType
+from datetime import datetime, timedelta
+
 import config
 from AlexaMusic import app
-from AlexaMusic.core.call import Alexa, autoend
-from datetime import datetime, timedelta
-from AlexaMusic.utils.database import get_client, is_active_chat, is_autoend
+from AlexaMusic.core.call import Alexa
+from AlexaMusic.utils.database import (
+    get_client,
+    is_active_chat,
+    is_autoend,
+    get_assistant,
+)
+
+autoend = {}
 
 
 async def auto_leave():
@@ -51,29 +59,32 @@ asyncio.create_task(auto_leave())
 
 
 async def auto_end():
-    while not await asyncio.sleep(5):
-        if not await is_autoend():
-            continue
-        for chat_id in autoend:
-            timer = autoend.get(chat_id)
-            if not timer:
-                continue
+    while True:
+        await asyncio.sleep(30)
+        for chat_id, timer in list(autoend.items()):
             if datetime.now() > timer:
                 if not await is_active_chat(chat_id):
-                    autoend[chat_id] = {}
+                    del autoend[chat_id]
                     continue
-                autoend[chat_id] = {}
-                try:
-                    await Alexa.stop_stream(chat_id)
-                except:
-                    continue
-                try:
-                    await app.send_message(
-                        chat_id,
-                        "ʙᴏᴛ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴄʟᴇᴀʀᴇᴅ ᴛʜᴇ ǫᴜᴇᴜᴇ ᴀɴᴅ ʟᴇғᴛ ᴠɪᴅᴇᴏᴄʜᴀᴛ ʙᴇᴄᴀᴜsᴇ ɴᴏ ᴏɴᴇ ᴡᴀs ʟɪsᴛᴇɴɪɴɢ sᴏɴɢs ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.",
-                    )
-                except:
-                    continue
+                userbot = await get_assistant(chat_id)
+                members = []
+                async for member in userbot.get_call_members(chat_id):
+                    if member is None:
+                        continue
+                    members.append(member)
+                if len(members) <= 1:
+                    try:
+                        await Alexa.stop_stream(chat_id)
+                    except Exception:
+                        pass
+                    try:
+                        await app.send_message(
+                            chat_id,
+                            "ʙᴏᴛ ᴀᴜᴛᴏᴍᴀᴛɪᴄᴀʟʟʏ ᴄʟᴇᴀʀᴇᴅ ᴛʜᴇ ǫᴜᴇᴜᴇ ᴀɴᴅ ʟᴇғᴛ ᴠɪᴅᴇᴏᴄʜᴀᴛ ʙᴇᴄᴀᴜsᴇ ɴᴏ ᴏɴᴇ ᴡᴀs ʟɪsᴛᴇɴɪɴɢ sᴏɴɢs ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.",
+                        )
+                    except Exception:
+                        pass
+                del autoend[chat_id]
 
 
 asyncio.create_task(auto_end())

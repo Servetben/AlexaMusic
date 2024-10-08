@@ -101,20 +101,11 @@ async def userdel(client, message: Message, _):
 @app.on_message(filters.command(SUDOUSERS_COMMAND) & ~BANNED_USERS)
 @language
 async def sudoers_list(client, message: Message, _):
-    if message.from_user.id not in SUDOERS:
-        return await message.reply_text(
-            "» **😁 ʜᴇʜᴇʜᴇ ᴏɴʟʏ ᴍʏ ᴛᴇᴀᴍ ᴄᴀɴ ᴅᴏ ᴛʜɪs ɴɪɢᴀ\n» 🤫 ᴄᴏᴢ ᴀʟᴇxᴀ ᴅᴏᴇsɴ'ᴛ ᴀʟᴏᴡ ʏᴏᴜ ᴛᴏ ᴘᴇʀғᴏᴍᴇ ᴛʜɪs ᴀᴄᴛɪᴏɴ ʙᴇᴛᴛᴇʀ sᴜɢɢᴇsᴛɪᴏɴ ғᴏʀ ʏᴏᴜ ᴛᴏ ᴊᴏɪɴ** @Alexa_Help"
-        )
     text = _["sudo_5"]
+    user = await app.get_users(OWNER_ID)
+    user = user.first_name if not user.mention else user.mention
+    text += f"1➤ {user}\n"
     count = 0
-    for x in OWNER_ID:
-        try:
-            user = await app.get_users(x)
-            user = user.first_name if not user.mention else user.mention
-            count += 1
-        except Exception:
-            continue
-        text += f"{count}➤ {user}\n"
     smex = 0
     for user_id in SUDOERS:
         if user_id not in OWNER_ID:
